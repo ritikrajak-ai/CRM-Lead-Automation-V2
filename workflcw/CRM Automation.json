@@ -1,0 +1,364 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "create-lead",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -288,
+        -720
+      ],
+      "id": "19556b2e-4e1d-4f12-91be-a2ee31a20388",
+      "name": "Webhook",
+      "webhookId": "c6dbed12-b78a-4fac-8cb7-81faf2bbe4eb"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "40e841fd-0e39-4013-a48f-ec4b21438464",
+              "leftValue": "={{ $json.name }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "bd6ddc3f-a1ad-4688-9fe8-8bc44b2cf75b",
+              "leftValue": "={{ $json.email }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "993bb2f7-de88-4ff6-b7d9-0026b6992f72",
+              "leftValue": "={{ $json.country }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        160,
+        -720
+      ],
+      "id": "a88cb840-7533-4c27-9258-52b2fec7fce9",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{\n  \"success\": false,\n  \"message\": \"Missing required fields\",\n  \"required\": [\n    \"name\",\n    \"email\",\n    \"phone\"\n  ]\n}",
+        "options": {
+          "responseCode": 400
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        384,
+        -624
+      ],
+      "id": "ecbf2553-6198-4e2b-93ff-c96bdcb94397",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "aec4e469-a7e6-461e-9b81-f0e5ff3bf3b4",
+              "name": "name",
+              "value": "={{ $json.body.name }}",
+              "type": "string"
+            },
+            {
+              "id": "ca2260d3-0772-4342-9394-ed05cf3d0f25",
+              "name": "email",
+              "value": "={{ $json.body.email }}",
+              "type": "string"
+            },
+            {
+              "id": "21fc66c9-48f4-4659-a3b9-24da89330e9f",
+              "name": "phone",
+              "value": "={{ $json.body.phone }}",
+              "type": "string"
+            },
+            {
+              "id": "b349f98d-f7d5-43bf-9fe4-8c2afc25f16c",
+              "name": "country",
+              "value": "={{ $json.body.country }}",
+              "type": "string"
+            },
+            {
+              "id": "5d57e911-20d6-418c-9b85-1fe5b99c1d7e",
+              "name": "budget",
+              "value": "={{ $json.body.budget }}",
+              "type": "string"
+            },
+            {
+              "id": "55912263-a1af-4698-92f6-359dcf27e61b",
+              "name": "source",
+              "value": "={{ $json.body.source }}",
+              "type": "string"
+            },
+            {
+              "id": "e4706e12-ccf1-452d-b801-28288efe1be1",
+              "name": "lead_id",
+              "value": "={{ $json.body.lead_id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        -64,
+        -720
+      ],
+      "id": "5a74b240-2d0c-4237-873c-2be73eccf256",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "fca6e04f-805d-493f-94e1-bc5a742fb0f1",
+              "name": "request_id",
+              "value": "=req_{{$execution.id}}",
+              "type": "string"
+            },
+            {
+              "id": "cc9c8dd9-a497-4eb2-b616-a79352ccf8cd",
+              "name": "lead_id",
+              "value": "={{ $json.lead_id || \"lead_\" + $execution.id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        384,
+        -816
+      ],
+      "id": "d4742e6b-7e17-4e5c-a983-6fdbc85a4f41",
+      "name": "Edit Fields3"
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "leads",
+          "mode": "list",
+          "cachedResultName": "leads"
+        },
+        "where": {
+          "values": [
+            {
+              "column": "request_id",
+              "value": "={{ $('Edit Fields3').item.json.request_id }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.7,
+      "position": [
+        816,
+        -1024
+      ],
+      "id": "6821fbfb-84a9-4c66-a5db-a3d8cd73c43c",
+      "name": "Select rows from a table2",
+      "alwaysOutputData": true,
+      "credentials": {
+        "postgres": {
+          "id": "0InMMfgMf8rJ6l3t",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "01c46870-ce61-41a8-a0f7-4b3222927cda",
+              "leftValue": "={{ $json.request_exists }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "false",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1280,
+        -880
+      ],
+      "id": "a8092cb1-ade2-4ad7-b02c-fa4a83e6f0f3",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "dce33e9f-a284-4bbd-921c-6684adafe0fc",
+              "name": "request_exists",
+              "value": "={{ $json.request_id ? true : false }}",
+              "type": "boolean"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        1056,
+        -880
+      ],
+      "id": "2b91f8da-d8e4-4e75-9829-2632d1fc72e2",
+      "name": "Edit Fields4"
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields3",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields3": {
+      "main": [
+        [
+          {
+            "node": "Select rows from a table2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Select rows from a table2": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [],
+        []
+      ]
+    },
+    "Edit Fields4": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "dfbf669a698c9606795ece00d3016d494501009f9126ffac398bcd8c972c8d17"
+  }
+}
