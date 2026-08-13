@@ -90,6 +90,107 @@
     },
     {
       "parameters": {
+        "operation": "select",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "countries",
+          "mode": "list",
+          "cachedResultName": "countries"
+        },
+        "where": {
+          "values": [
+            {
+              "column": "country_name",
+              "value": "={{ $json.country }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.7,
+      "position": [
+        1952,
+        -1056
+      ],
+      "id": "e2ff17a7-9360-4648-9b3e-75628493f50c",
+      "name": "Select rows from a table",
+      "credentials": {
+        "postgres": {
+          "id": "0InMMfgMf8rJ6l3t",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "teams",
+          "mode": "list",
+          "cachedResultName": "teams"
+        },
+        "where": {
+          "values": [
+            {
+              "column": "country_id",
+              "value": "={{ $json.country_id }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.7,
+      "position": [
+        2624,
+        -1056
+      ],
+      "id": "60f450b1-d3c9-419d-8c7d-d37988c5cab4",
+      "name": "Select rows from a table1",
+      "credentials": {
+        "postgres": {
+          "id": "0InMMfgMf8rJ6l3t",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "4b2f14fc-6112-4835-b7fa-d492f65f5d59",
+              "name": "country_id",
+              "value": "={{ $json.id }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        2176,
+        -1056
+      ],
+      "id": "d59c63ad-0524-4138-8b4f-08dd496b55fd",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
         "assignments": {
           "assignments": [
             {
@@ -149,6 +250,60 @@
     },
     {
       "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "numberInputs": 3,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        3072,
+        -832
+      ],
+      "id": "aedd42af-7d0c-4efd-9756-56f7137602dc",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "ad93c2e0-a90f-4038-9d19-35a5cbd84ab3",
+              "name": "team_id",
+              "value": "={{ $json.id }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        2848,
+        -1056
+      ],
+      "id": "5c4e70a3-8dc6-4470-8fa5-c368589d4836",
+      "name": "Edit Fields2"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        2400,
+        -976
+      ],
+      "id": "068c462a-4f96-4965-aed5-01453cc4aa1b",
+      "name": "Merge1"
+    },
+    {
+      "parameters": {
         "assignments": {
           "assignments": [
             {
@@ -204,8 +359,8 @@
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.7,
       "position": [
-        816,
-        -1024
+        832,
+        -880
       ],
       "id": "6821fbfb-84a9-4c66-a5db-a3d8cd73c43c",
       "name": "Select rows from a table2",
@@ -273,6 +428,217 @@
       ],
       "id": "2b91f8da-d8e4-4e75-9829-2632d1fc72e2",
       "name": "Edit Fields4"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{\n\"success\":false,\n\"message\":\"Duplicate request\"\n}",
+        "options": {
+          "responseCode": 400
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        1504,
+        -784
+      ],
+      "id": "9617fbc4-dcc5-4d4e-aed3-417fff24cf01",
+      "name": "Respond to Webhook1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "aec4e469-a7e6-461e-9b81-f0e5ff3bf3b4",
+              "name": "name",
+              "value": "={{ $('Edit Fields').item.json.name }}",
+              "type": "string"
+            },
+            {
+              "id": "ca2260d3-0772-4342-9394-ed05cf3d0f25",
+              "name": "email",
+              "value": "={{ $('Edit Fields').item.json.email }}",
+              "type": "string"
+            },
+            {
+              "id": "21fc66c9-48f4-4659-a3b9-24da89330e9f",
+              "name": "phone",
+              "value": "={{ $('Edit Fields').item.json.phone }}",
+              "type": "string"
+            },
+            {
+              "id": "b349f98d-f7d5-43bf-9fe4-8c2afc25f16c",
+              "name": "country",
+              "value": "={{ $('Edit Fields').item.json.country }}",
+              "type": "string"
+            },
+            {
+              "id": "5d57e911-20d6-418c-9b85-1fe5b99c1d7e",
+              "name": "budget",
+              "value": "={{ $('Edit Fields').item.json.budget }}",
+              "type": "number"
+            },
+            {
+              "id": "55912263-a1af-4698-92f6-359dcf27e61b",
+              "name": "source",
+              "value": "={{ $('Edit Fields').item.json.source }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        1728,
+        -976
+      ],
+      "id": "7f1a7913-4ed9-4f19-a0e8-6e7b1d2b5a07",
+      "name": "Edit Fields5"
+    },
+    {
+      "parameters": {
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "workflow_execution_logs",
+          "mode": "list",
+          "cachedResultName": "workflow_execution_logs"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "execution_id": "={{$execution.id}}",
+            "lead_data": "={{ {\n  name: $json.name,\n  email: $json.email,\n  phone: $json.phone,\n  country: $json.country,\n  budget: $json.budget,\n  source: $json.source\n} }}",
+            "lead_id": "={{ $json.lead_id }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "execution_id",
+              "displayName": "execution_id",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "workflow_name",
+              "displayName": "workflow_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "lead_id",
+              "displayName": "lead_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "lead_data",
+              "displayName": "lead_data",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "object",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "error_message",
+              "displayName": "error_message",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "error_node",
+              "displayName": "error_node",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "created_at",
+              "displayName": "created_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "updated_at",
+              "displayName": "updated_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.7,
+      "position": [
+        608,
+        -880
+      ],
+      "id": "3a57ca04-5968-4215-8210-32c97721a8f0",
+      "name": "insert in workflow_execution_logs",
+      "credentials": {
+        "postgres": {
+          "id": "0InMMfgMf8rJ6l3t",
+          "name": "Postgres account"
+        }
+      }
     }
   ],
   "connections": {
@@ -305,6 +671,39 @@
         ]
       ]
     },
+    "Select rows from a table": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Select rows from a table1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
     "Edit Fields": {
       "main": [
         [
@@ -316,11 +715,48 @@
         ]
       ]
     },
+    "Merge": {
+      "main": [
+        []
+      ]
+    },
+    "Edit Fields2": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge1": {
+      "main": [
+        [
+          {
+            "node": "Select rows from a table1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
     "Edit Fields3": {
       "main": [
         [
           {
-            "node": "Select rows from a table2",
+            "node": "Merge",
+            "type": "main",
+            "index": 2
+          },
+          {
+            "node": "insert in workflow_execution_logs",
             "type": "main",
             "index": 0
           }
@@ -340,8 +776,20 @@
     },
     "If1": {
       "main": [
-        [],
-        []
+        [
+          {
+            "node": "Edit Fields5",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond to Webhook1",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "Edit Fields4": {
@@ -349,6 +797,33 @@
         [
           {
             "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields5": {
+      "main": [
+        [
+          {
+            "node": "Select rows from a table",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "insert in workflow_execution_logs": {
+      "main": [
+        [
+          {
+            "node": "Select rows from a table2",
             "type": "main",
             "index": 0
           }
