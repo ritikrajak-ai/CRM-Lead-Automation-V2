@@ -1,0 +1,217 @@
+{
+  "name": "Error Trigger",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "20eb5f45-fc0e-49ed-9787-56b0d1bfa64a",
+      "name": "Error Trigger"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "b643270d-0a76-4b30-a47b-7221003927f3",
+              "name": "workflow_name",
+              "value": "={{ $('Error Trigger').item.json.workflow.name }}",
+              "type": "string"
+            },
+            {
+              "id": "1f738867-dda0-4aab-a2a2-8589cdb6bfc2",
+              "name": "execution_id",
+              "value": "={{ $('Error Trigger').item.json.execution.id }}",
+              "type": "number"
+            },
+            {
+              "id": "9800b025-dfda-4f82-81f1-fd987e30a76b",
+              "name": "error_message",
+              "value": "={{ $('Error Trigger').item.json.execution.error.message }}",
+              "type": "string"
+            },
+            {
+              "id": "5f4a2c36-04b1-4854-923c-4b388eb22f31",
+              "name": "error_node",
+              "value": "={{ $('Error Trigger').item.json.execution.lastNodeExecuted }}",
+              "type": "string"
+            },
+            {
+              "id": "c642d4d5-4567-4889-b00e-7f96193a35c1",
+              "name": "retryable",
+              "value": "true",
+              "type": "string"
+            },
+            {
+              "id": "fa7d1ef7-e853-414b-98e9-ef7ea50908e5",
+              "name": "lead_data",
+              "value": "={{ $json.lead_data }}",
+              "type": "object"
+            },
+            {
+              "id": "066bceb5-8322-43e4-9aef-3cbf597f93ad",
+              "name": "lead_id",
+              "value": "={{ $json.lead_id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        432,
+        16
+      ],
+      "id": "2089f3f7-77b9-4724-916c-40b476104812",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://automationtest02.app.n8n.cloud/webhook/3f86f262-e1d6-4a0e-8384-b39efcad62ab",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "=Workflow_name",
+              "value": "={{ $json.workflow_name }}"
+            },
+            {
+              "name": "=execution_id",
+              "value": "={{ $json.execution_id }}"
+            },
+            {
+              "name": "=error_node",
+              "value": "={{ $json.error_node }}"
+            },
+            {
+              "name": "=retryable",
+              "value": "={{ $json.retryable }}"
+            },
+            {
+              "name": "=error_message",
+              "value": "={{ $json.error_message }}"
+            },
+            {
+              "name": "=lead_data",
+              "value": "={{ $json.lead_data }}"
+            },
+            {
+              "name": "=lead_id",
+              "value": "={{ $json.lead_id }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        656,
+        0
+      ],
+      "id": "3c91e355-faf8-4690-9270-753bce642fe8",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "workflow_execution_logs",
+          "mode": "list",
+          "cachedResultName": "workflow_execution_logs"
+        },
+        "where": {
+          "values": [
+            {
+              "column": "execution_id",
+              "value": "={{ $json.execution.id }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.7,
+      "position": [
+        208,
+        0
+      ],
+      "id": "2f784867-1644-40b5-89ff-2054ae6ad7ca",
+      "name": "Select rows from a table",
+      "credentials": {
+        "postgres": {
+          "id": "0InMMfgMf8rJ6l3t",
+          "name": "Postgres account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Error Trigger": {
+      "main": [
+        [
+          {
+            "node": "Select rows from a table",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Select rows from a table": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": true,
+    "timeSavedMode": "fixed",
+    "callerPolicy": "workflowsFromSameOwner",
+    "timezone": "Asia/Kolkata",
+    "saveExecutionProgress": true,
+    "timeSavedPerExecution": 1
+  },
+  "versionId": "ea918f40-7299-40a3-bf7f-c325d41ce5cd",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "dfbf669a698c9606795ece00d3016d494501009f9126ffac398bcd8c972c8d17"
+  },
+  "nodeGroups": [],
+  "id": "RQjLXMqMIxNYl2Qy",
+  "tags": []
+}
