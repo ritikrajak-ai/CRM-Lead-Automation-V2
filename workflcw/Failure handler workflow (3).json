@@ -1,0 +1,1064 @@
+{
+  "name": "Failure handler workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "3f86f262-e1d6-4a0e-8384-b39efcad62ab",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -1472,
+        160
+      ],
+      "id": "d057f7a3-9bb3-453f-a215-2946a373c08e",
+      "name": "Webhook",
+      "webhookId": "3f86f262-e1d6-4a0e-8384-b39efcad62ab"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "579928bf-7d40-43bf-9261-d6d6431515f3",
+              "name": "timestamp",
+              "value": "={{$now}}",
+              "type": "string"
+            },
+            {
+              "id": "459ba779-b2bd-44fc-ae50-bfc2d7b2d7ec",
+              "name": "source_system",
+              "value": "=",
+              "type": "string"
+            },
+            {
+              "id": "292e6ff3-ba9e-4f1b-9513-f8b7ebf6281b",
+              "name": "workflow",
+              "value": "={{ $json.body.Workflow_name }}",
+              "type": "string"
+            },
+            {
+              "id": "22bb8a24-817b-419a-b8f4-65b311f88cb9",
+              "name": "stage",
+              "value": "={{ $json.body.error_node }}",
+              "type": "string"
+            },
+            {
+              "id": "6b75906d-94c1-4d40-bad4-206f6098ed90",
+              "name": "error_message",
+              "value": "={{ $json.body.error_message }}",
+              "type": "string"
+            },
+            {
+              "id": "1f93f06e-3332-4c5d-872e-2799037c3e9f",
+              "name": "lead_data",
+              "value": "={{ $json.body.lead_data }}",
+              "type": "object"
+            },
+            {
+              "id": "ab1a97ac-87de-481f-a497-5cb66fd77b1b",
+              "name": "retry_count",
+              "value": "0",
+              "type": "string"
+            },
+            {
+              "id": "73b9bdf5-c0f5-4dae-a2a0-90406244be77",
+              "name": "unique id",
+              "value": "={{ $json.body['Unique id'] }}",
+              "type": "string"
+            },
+            {
+              "id": "1381d2a8-00a0-49ec-9551-ae995befd631",
+              "name": "Lead id",
+              "value": "={{ $json.body.lead_id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1248,
+        160
+      ],
+      "id": "efd00f13-2baf-43bf-95cb-02d8fc268c6d",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "762bd007-cb31-4c5f-acec-715b11e8edf5",
+              "leftValue": "={{ $json.error_message.toLowerCase()}}",
+              "rightValue": "credential",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "ea8f1664-c3f2-4d94-888b-c8c4262ec8ab",
+              "leftValue": "={{ $json.error_message.toLowerCase() }}",
+              "rightValue": "timeout",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "e82630f2-5b3c-4c09-995e-68b13dd72480",
+              "leftValue": "={{ $json.error_message.toLowerCase() }}",
+              "rightValue": "rate limit",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "bc231149-7a46-4582-9e41-4976bbc482b6",
+              "leftValue": "={{ $json.error_message.toLowerCase()}} ",
+              "rightValue": "econnreset",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "b64fc3ea-4125-4eb8-9926-291092b54983",
+              "leftValue": "={{ $json.error_message.toLowerCase() }}",
+              "rightValue": "enotfound",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "b3de0edc-492d-490c-b4c7-3b50618c20c6",
+              "leftValue": "={{ $json.error_message.toLowerCase() }}",
+              "rightValue": "network",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "e4f76ecf-c3a8-48c4-b0a3-94aa651bb57f",
+              "leftValue": "={{ $json.error_message.toLowerCase() }}",
+              "rightValue": "database",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "eba103f9-0c90-440d-a11a-94f4d0932f95",
+              "leftValue": "={{ $json.error_message.toLowerCase() }}",
+              "rightValue": "connection",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "056b944e-d7f1-4410-b2a7-e027c4db7448",
+              "leftValue": "={{ $json.error_message.toLowerCase() }}",
+              "rightValue": "econnrefused",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "a0f6cfe5-f1e1-4d7a-baf5-88e5010a5663",
+              "leftValue": "={{ $json.error_message.toLowerCase() }}",
+              "rightValue": "timed out",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -1472,
+        -256
+      ],
+      "id": "51453edc-bab2-4de4-b1b9-1f4829b51504",
+      "name": "classify error"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{\n  \"status\": \"logged\",\n  \"result\": \"stored in sheet\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        320,
+        160
+      ],
+      "id": "53dced9a-c087-44be-ab42-a93c3127ae71",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{\n  \"status\": \"logged\",\n  \"result\": \"stored in sheet\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        -352,
+        256
+      ],
+      "id": "c0ca6391-04a8-490d-b56a-12ad3f429035",
+      "name": "Respond to Webhook1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "8df22071-1c76-4ea7-81fa-5250d503d89e",
+              "leftValue": "={{ $json.id }}",
+              "rightValue": "={{ $json.Lead_ID }}",
+              "operator": {
+                "type": "number",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -352,
+        64
+      ],
+      "id": "170d49d3-5e03-418f-962d-68df53e958cf",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{\n  \"status\": \"logged\",\n  \"result\": \"stored in sheet\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        96,
+        -32
+      ],
+      "id": "65f1bae8-95c6-4722-8b98-4114dc00bf5c",
+      "name": "Respond to Webhook2"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -128,
+        160
+      ],
+      "id": "9e9b2a2b-8346-40d6-bccd-6d12413fe5d6",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "workflow_errors",
+          "mode": "list",
+          "cachedResultName": "workflow_errors"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "retryable": false,
+            "retry_count": 0,
+            "lead_id": "={{ $json['Lead id'] }}",
+            "workflow_name": "={{ $json.workflow }}",
+            "error_node": "={{ $json.stage }}",
+            "error_message": "={{ $json.error_message }}",
+            "severity": "High",
+            "status": "FAILED",
+            "payload_data": "={{ $('Edit Fields').item.json.lead_data }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "lead_id",
+              "displayName": "lead_id",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "workflow_name",
+              "displayName": "workflow_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "error_node",
+              "displayName": "error_node",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "error_message",
+              "displayName": "error_message",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "error_code",
+              "displayName": "error_code",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "severity",
+              "displayName": "severity",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "retryable",
+              "displayName": "retryable",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "created_at",
+              "displayName": "created_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "request_id",
+              "displayName": "request_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "retry_count",
+              "displayName": "retry_count",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "payload_data",
+              "displayName": "payload_data",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "object",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.7,
+      "position": [
+        -576,
+        256
+      ],
+      "id": "6d240437-ada6-4b6d-99bd-9395daa83647",
+      "name": "Insert rows in a table",
+      "credentials": {
+        "postgres": {
+          "id": "0InMMfgMf8rJ6l3t",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "workflow_errors",
+          "mode": "list",
+          "cachedResultName": "workflow_errors"
+        },
+        "where": {
+          "values": [
+            {
+              "column": "lead_id",
+              "value": "={{ $('Edit Fields').item.json['Lead id'] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.7,
+      "position": [
+        -576,
+        64
+      ],
+      "id": "f72def46-dd74-45ac-97e5-94a8c371f012",
+      "name": "Select rows from a table",
+      "alwaysOutputData": true,
+      "credentials": {
+        "postgres": {
+          "id": "0InMMfgMf8rJ6l3t",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "workflow_errors",
+          "mode": "list",
+          "cachedResultName": "workflow_errors"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "retryable": true,
+            "retry_count": "={{ $json.retry_count+1 }}",
+            "lead_id": "={{ $('Edit Fields').item.json['Lead id'] }}"
+          },
+          "matchingColumns": [
+            "lead_id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "lead_id",
+              "displayName": "lead_id",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "workflow_name",
+              "displayName": "workflow_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "error_node",
+              "displayName": "error_node",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "error_message",
+              "displayName": "error_message",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "error_code",
+              "displayName": "error_code",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "severity",
+              "displayName": "severity",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "retryable",
+              "displayName": "retryable",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "created_at",
+              "displayName": "created_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "request_id",
+              "displayName": "request_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "retry_count",
+              "displayName": "retry_count",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.7,
+      "position": [
+        -128,
+        -32
+      ],
+      "id": "257293c1-5fcd-47e6-bcf3-67ea5c0d3b74",
+      "name": "Update rows in a table",
+      "credentials": {
+        "postgres": {
+          "id": "0InMMfgMf8rJ6l3t",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "workflow_errors",
+          "mode": "list",
+          "cachedResultName": "workflow_errors"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "retryable": true,
+            "lead_id": "={{ $('Edit Fields').item.json['Lead id'] }}",
+            "workflow_name": "={{ $('Edit Fields').item.json.workflow }}",
+            "error_node": "={{ $('Edit Fields').item.json.stage }}",
+            "error_message": "={{ $('Edit Fields').item.json.error_message }}",
+            "severity": "High",
+            "status": "Retry_Pending",
+            "retry_count": "={{ $('Edit Fields').item.json.retry_count }}",
+            "payload_data": "={{ $('Edit Fields').item.json.lead_data }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "lead_id",
+              "displayName": "lead_id",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "workflow_name",
+              "displayName": "workflow_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "error_node",
+              "displayName": "error_node",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "error_message",
+              "displayName": "error_message",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "error_code",
+              "displayName": "error_code",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "severity",
+              "displayName": "severity",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "retryable",
+              "displayName": "retryable",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "created_at",
+              "displayName": "created_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "request_id",
+              "displayName": "request_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "retry_count",
+              "displayName": "retry_count",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "payload_data",
+              "displayName": "payload_data",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "object",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.7,
+      "position": [
+        96,
+        160
+      ],
+      "id": "05586dbd-41f1-47e5-911d-97b5d7de8816",
+      "name": "Insert rows in a table1",
+      "credentials": {
+        "postgres": {
+          "id": "0InMMfgMf8rJ6l3t",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const error = ($json.error_message || \"\").toLowerCase();\n\nlet category = \"unknown\";\nlet retryable = false;\n\n\n// =========================\n// RETRYABLE ERRORS\n// =========================\n\nif (\n\n  // Database temporary issues\n  error.includes(\"database\") ||\n  error.includes(\"db timeout\") ||\n  error.includes(\"database timeout\") ||\n  error.includes(\"connection timeout\") ||\n\n  // Network issues\n  error.includes(\"network\") ||\n  error.includes(\"econnreset\") ||\n  error.includes(\"econnrefused\") ||\n  error.includes(\"enotfound\") ||\n  error.includes(\"socket hang up\") ||\n  error.includes(\"connection lost\") ||\n  error.includes(\"connection closed\") ||\n\n  // Timeout issues\n  error.includes(\"timeout\") ||\n  error.includes(\"timed out\") ||\n  error.includes(\"request timeout\") ||\n  error.includes(\"gateway timeout\") ||\n\n  // Rate limiting\n  error.includes(\"rate limit\") ||\n  error.includes(\"429\") ||\n  error.includes(\"too many requests\") ||\n\n  // Temporary server failures\n  error.includes(\"500\") ||\n  error.includes(\"502\") ||\n  error.includes(\"503\") ||\n  error.includes(\"504\") ||\n  error.includes(\"internal server error\") ||\n  error.includes(\"service unavailable\") ||\n  error.includes(\"bad gateway\") ||\n\n  // Temporary external service failures\n  error.includes(\"provider unavailable\") ||\n  error.includes(\"service temporarily unavailable\") ||\n  error.includes(\"temporary failure\") ||\n\n  // AI/LLM temporary failures\n  error.includes(\"llm timeout\") ||\n  error.includes(\"model unavailable\") ||\n  error.includes(\"token limit exceeded\")\n\n) {\n\n  category = \"temporary_failure\";\n  retryable = true;\n\n}\n\n\n// =========================\n// NON-RETRYABLE ERRORS\n// =========================\n\nelse if (\n\n  // Validation errors\n  error.includes(\"validation\") ||\n  error.includes(\"required field\") ||\n  error.includes(\"missing field\") ||\n  error.includes(\"invalid data\") ||\n  error.includes(\"invalid format\") ||\n\n  // Authentication / Authorization\n  error.includes(\"401\") ||\n  error.includes(\"unauthorized\") ||\n  error.includes(\"invalid credential\") ||\n  error.includes(\"invalid token\") ||\n  error.includes(\"403\") ||\n  error.includes(\"forbidden\") ||\n  error.includes(\"permission denied\") ||\n\n  // Duplicate data\n  error.includes(\"duplicate\") ||\n  error.includes(\"already exists\") ||\n  error.includes(\"unique constraint\") ||\n  error.includes(\"duplicate key\") ||\n\n  // Business logic errors\n  error.includes(\"business rule\") ||\n  error.includes(\"not allowed\") ||\n  error.includes(\"operation rejected\") ||\n\n  // Resource errors\n  error.includes(\"404\") ||\n  error.includes(\"not found\") ||\n  error.includes(\"resource unavailable\") ||\n\n  // AI permanent failures\n  error.includes(\"invalid json response\") ||\n  error.includes(\"unsupported request\") ||\n\n  // Data format problems\n  error.includes(\"parse error\") ||\n  error.includes(\"syntax error\")\n\n) {\n\n  category = \"permanent_failure\";\n  retryable = false;\n\n}\n\n\n// =========================\n// UNKNOWN ERRORS\n// =========================\n\nelse {\n\n  category = \"unknown_failure\";\n  retryable = false;\n\n}\n\n\nreturn {\n  json: {\n    ...$json,\n    normalized_error: error,\n    error_category: category,\n    retryable: retryable\n  }\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1008,
+        160
+      ],
+      "id": "792d7edb-9238-4d99-abf9-b85051af7078",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "08f048ad-63e3-4f78-ae99-403dbdb0b597",
+              "leftValue": "={{ $json.retryable }}",
+              "rightValue": false,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -800,
+        160
+      ],
+      "id": "2fcd5d91-136e-4db5-90f7-4989b4559cc8",
+      "name": "If1"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "classify error": {
+      "main": [
+        [],
+        []
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Update rows in a table",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Insert rows in a table1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insert rows in a table": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Select rows from a table": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update rows in a table": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insert rows in a table1": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Select rows from a table",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Insert rows in a table",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": true,
+    "timeSavedMode": "fixed",
+    "callerPolicy": "workflowsFromSameOwner",
+    "timeSavedPerExecution": 1
+  },
+  "versionId": "e62f262d-c5c0-4287-af15-2f90e12e671c",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "dfbf669a698c9606795ece00d3016d494501009f9126ffac398bcd8c972c8d17"
+  },
+  "nodeGroups": [],
+  "id": "1fhFXPGYASHtQWdZ",
+  "tags": []
+}
